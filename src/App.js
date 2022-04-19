@@ -3,13 +3,15 @@ import {Table , Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AllModal from './components/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import {allData, deleteData, singleData } from './redux/slicer';
+import {allData, deleteData, updateData } from './redux/slicer';
+import { singleData } from './redux/editSlicer';
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 function App() {
   const [myState, setMyState] = useState(useSelector((state)=> state.crud))
   const reduxAllUsers = useSelector((state)=> state.crud);
+  const reduxSingleUsers = useSelector((state)=> state.editCrud);
   const dispatch = useDispatch();
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [action, setAction] = useState('add');
@@ -26,13 +28,16 @@ function App() {
   )
 
 
-  const [editUserData, setEditUserData] = useState(
-    useSelector((state)=> state.editCrud)
-  )
-
+  const [editUserData, setEditUserData] = useState({})
   useEffect(()=>{
     setMyState(reduxAllUsers)
   },[reduxAllUsers])
+
+
+  useEffect(()=>{
+    setEditUserData(reduxSingleUsers)
+  },[reduxSingleUsers])
+
 
   const clear = () => { setNewUserData({ ...newUserData, name: '', email: "", phone: "", age: ""})}
   
@@ -47,34 +52,38 @@ function App() {
     clear()
   }
   const viewData=(i)=>{
-    dispatch(singleData(i))
+    const data = {
+      name : reduxAllUsers[i].name,
+      email : reduxAllUsers[i].email,
+      phone : reduxAllUsers[i].phone,
+      age : reduxAllUsers[i].age,
+      index : i,
+    }
+    
+    dispatch(singleData(data))
     setAddModalVisible(true)
+    // console.log(reduxSingleUsers);
     setAction('edit')
   }
   
   const editSubmit = (i) => {
-    const editUser = editUserData;
-    // console.log(editUser);
-    const oldData = myState;
-    oldData.splice(i,1,editUser);
-    // dispatch(allUser(oldData));
-    // console.log(oldData);
+    const editUser ={
+      name: editUserData.name,
+      email:editUserData.email,
+      age:editUserData.age,
+      phone:editUserData.phone
+    }
+    const index = parseInt(i);
+    var oldData = myState;
+    const temp =oldData.map((el,i) => i ===  index? el =  editUser : el) 
+    console.log(temp);
+    dispatch(updateData(temp));
     setAddModalVisible(false);
     clear();
 };
 
-
   const onDelete =(i)=>{
-    console.log(">>>>>>>>>>>>>>>");
     dispatch(deleteData(i))
-
-    // console.log(reduxAllUsers);
-    // reduxAllUsers.splice(i,1);
-
-    // setMyState(reduxAllUsers);
-    // myState.assign(oldData)
-    // dispatch(allUser(reduxAllUsers));
-
   }
 
   return (

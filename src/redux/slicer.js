@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = [];
-const singleState ={};
 
 export const crudSlice = createSlice({
   name: 'crud',
@@ -17,30 +16,15 @@ export const crudSlice = createSlice({
         deleteArr.splice(action.payload,1)
         state = deleteArr
     },
-  },
-})
-export const editSlice = createSlice({
-  name: 'editCrud',
-  singleState,
-  reducers: {
-    singleData: (state ,action) => {
-      console.log(">>>>>>>>>>>>>> Edit")
-      // let data = initialState[action.payload];
-      //     console.log(initialState);
-      //     state.name = data.name;
-      //     state.email = data.email;
-      //     state.age = data.age;
-      //     state.phone = data.phone;  
+    updateData: (state,action) => {
+    
+      state = action.payload;
+      return state;
     },
   },
 })
 
-
-
-
 // Action creators are generated for each case reducer function
-export const { allData, deleteData } = crudSlice.actions
-export const { singleData } = editSlice.actions
-
+export const { allData, deleteData , updateData} = crudSlice.actions
 
 export default crudSlice.reducer
