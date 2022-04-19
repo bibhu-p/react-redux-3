@@ -16,7 +16,6 @@ function App() {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [action, setAction] = useState('add');
 
-
   const [newUserData, setNewUserData] = useState(
     {
       name: "",
@@ -27,7 +26,6 @@ function App() {
     }
   )
 
-
   const [editUserData, setEditUserData] = useState({})
   useEffect(()=>{
     setMyState(reduxAllUsers)
@@ -37,7 +35,6 @@ function App() {
   useEffect(()=>{
     setEditUserData(reduxSingleUsers)
   },[reduxSingleUsers])
-
 
   const clear = () => { setNewUserData({ ...newUserData, name: '', email: "", phone: "", age: ""})}
   
@@ -65,7 +62,7 @@ function App() {
     // console.log(reduxSingleUsers);
     setAction('edit')
   }
-  
+
   const editSubmit = (i) => {
     const editUser ={
       name: editUserData.name,
@@ -76,7 +73,6 @@ function App() {
     const index = parseInt(i);
     var oldData = myState;
     const temp =oldData.map((el,i) => i ===  index? el =  editUser : el) 
-    console.log(temp);
     dispatch(updateData(temp));
     setAddModalVisible(false);
     clear();
@@ -117,7 +113,6 @@ function App() {
         </tbody>
       </Table>
     </div>
-
     {addModalVisible && <AllModal
       addModalVisible = {addModalVisible}
       setAddModalVisible = {setAddModalVisible}
